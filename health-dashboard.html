@@ -1,0 +1,1853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#3b82f6">
+    <title>John's Health System</title>
+    <link rel="manifest" href="manifest.json">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --primary: #3b82f6;
+            --primary-light: #60a5fa;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text: #374151;
+            --text-light: #6b7280;
+            --border: #e5e7eb;
+            --shadow: 0 1px 3px rgba(0,0,0,0.1);
+            --shadow-lg: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding-bottom: 80px;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            padding: 24px 0;
+            box-shadow: var(--shadow-lg);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .greeting {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .date {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            margin: 16px 0;
+            box-shadow: var(--shadow);
+        }
+        
+        .card-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 16px;
+            color: var(--text);
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 6px;
+            color: var(--text);
+        }
+        
+        input[type="number"],
+        input[type="text"],
+        select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--border);
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.2s;
+        }
+        
+        input:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px 24px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            width: 100%;
+        }
+        
+        button:active {
+            transform: scale(0.98);
+        }
+        
+        .button-secondary {
+            background: var(--border);
+            color: var(--text);
+        }
+        
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: var(--bg);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+        
+        .checkbox-item.completed {
+            background: rgba(16, 185, 129, 0.1);
+            border-color: var(--success);
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-top: 16px;
+        }
+        
+        .stat-box {
+            background: var(--bg);
+            padding: 16px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+        
+        .progress-bar {
+            background: var(--border);
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--success);
+            transition: width 0.3s ease;
+        }
+        
+        .progress-fill.warning {
+            background: var(--warning);
+        }
+        
+        .progress-fill.danger {
+            background: var(--danger);
+        }
+        
+        .streak-display {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px;
+            background: var(--bg);
+            border-radius: 8px;
+            margin: 8px 0;
+        }
+        
+        .streak-icon {
+            font-size: 24px;
+        }
+        
+        .streak-info {
+            flex: 1;
+        }
+        
+        .streak-number {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .streak-label {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 600;
+            margin: 4px;
+        }
+        
+        .badge-success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+        
+        .badge-warning {
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+        
+        .badge-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+        
+        .nav-tabs {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--card-bg);
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+        
+        .nav-tab {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 8px 16px;
+            border: none;
+            background: none;
+            color: var(--text-light);
+            cursor: pointer;
+            transition: all 0.2s;
+            width: auto;
+        }
+        
+        .nav-tab.active {
+            color: var(--primary);
+        }
+        
+        .nav-icon {
+            font-size: 24px;
+        }
+        
+        .nav-label {
+            font-size: 11px;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: var(--primary);
+            position: absolute;
+            animation: confetti-fall 2s ease-out forwards;
+        }
+        
+        @keyframes confetti-fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .achievement-popup {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            z-index: 1000;
+            animation: slideDown 0.3s ease-out;
+            max-width: 90%;
+        }
+        
+        @keyframes slideDown {
+            from {
+                transform: translateX(-50%) translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(-50%) translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .achievement-title {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+        
+        .achievement-desc {
+            font-size: 14px;
+            color: var(--text-light);
+        }
+        
+        .meal-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+        }
+        
+        .summary-box {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(96, 165, 250, 0.05) 100%);
+            padding: 16px;
+            border-radius: 8px;
+            margin: 16px 0;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .summary-row:last-child {
+            border-bottom: none;
+            font-weight: 700;
+            font-size: 18px;
+        }
+        
+        .backup-banner {
+            background: rgba(245, 158, 11, 0.1);
+            border: 2px solid var(--warning);
+            border-radius: 8px;
+            padding: 16px;
+            margin: 16px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .banner-close {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 0;
+            width: auto;
+            color: var(--warning);
+        }
+        
+        .input-row {
+            display: flex;
+            gap: 8px;
+            align-items: flex-end;
+        }
+        
+        .input-row input,
+        .input-row select {
+            flex: 1;
+        }
+        
+        .quick-picks {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-top: 4px;
+        }
+        
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            margin-top: 16px;
+        }
+        
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            font-size: 12px;
+            background: var(--bg);
+        }
+        
+        .calendar-day.completed {
+            background: var(--success);
+            color: white;
+        }
+        
+        .calendar-day.partial {
+            background: var(--warning);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="greeting" id="greeting">Good morning, John</div>
+            <div class="date" id="currentDate"></div>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Backup Reminder Banner -->
+        <div id="backupBanner" class="backup-banner hidden">
+            <div>
+                <strong>⚠️ Reminder:</strong> Haven't backed up in 7+ days
+            </div>
+            <button class="banner-close" onclick="dismissBackupBanner()">×</button>
+        </div>
+
+        <!-- Dashboard View -->
+        <div id="dashboardView" class="view">
+            <!-- Current Form -->
+            <div class="card">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div class="stat-value" id="currentStreak">0</div>
+                        <div class="stat-label">Perfect days streak</div>
+                    </div>
+                    <div style="text-align: right;">
+                        <div class="stat-value" id="weekCompletion">0/7</div>
+                        <div class="stat-label">This week</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Today's Habits -->
+            <div class="card">
+                <div class="card-title">Today's Habits</div>
+                <div class="checkbox-group">
+                    <div class="checkbox-item" id="meditationCheck">
+                        <input type="checkbox" id="meditation" onchange="toggleHabit('meditation')">
+                        <label for="meditation" style="margin: 0; cursor: pointer;">Meditation (5min)</label>
+                    </div>
+                    <div class="checkbox-item" id="plankCheck">
+                        <input type="checkbox" id="plank" onchange="toggleHabit('plank')">
+                        <label for="plank" style="margin: 0; cursor: pointer;">Plank (60s)</label>
+                    </div>
+                    <div class="checkbox-item" id="deadHangCheck">
+                        <input type="checkbox" id="deadHang" onchange="toggleHabit('deadHang')">
+                        <label for="deadHang" style="margin: 0; cursor: pointer;">Dead hang (30s)</label>
+                    </div>
+                </div>
+            </div>
+
+            <!-- This Week Summary -->
+            <div class="card">
+                <div class="card-title">This Week</div>
+                <div style="margin-bottom: 12px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                        <span>Exercise</span>
+                        <span id="weekExercise">0/7</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="weekExerciseBar" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 12px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                        <span>Beer budget</span>
+                        <span id="weekBeer">0/15 pints</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="weekBeerBar" style="width: 0%"></div>
+                    </div>
+                </div>
+                
+                <div style="margin-bottom: 12px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                        <span>Weight trend</span>
+                        <span id="weekWeight">--</span>
+                    </div>
+                </div>
+                
+                <div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                        <span>Sleep avg</span>
+                        <span id="weekSleep">--</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="card">
+                <div class="card-title">Quick Stats</div>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <div class="stat-value" id="longestStreak">0</div>
+                        <div class="stat-label">Longest streak</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="currentWeight">--</div>
+                        <div class="stat-label">Weight</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="currentBF">--</div>
+                        <div class="stat-label">Body fat</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-value" id="strengthWeek">Week 1/19</div>
+                        <div class="stat-label">Strength progress</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Log View -->
+        <div id="logView" class="view hidden">
+            <!-- Morning Check-in -->
+            <div class="card">
+                <div class="card-title">Morning Check-in</div>
+                
+                <div class="form-group">
+                    <label>Today's Weight (kg)</label>
+                    <input type="number" id="todayWeight" step="0.1" placeholder="89.2">
+                </div>
+                
+                <div class="form-group">
+                    <label>Yesterday's Steps</label>
+                    <input type="number" id="yesterdaySteps" placeholder="12340">
+                </div>
+                
+                <div class="form-group">
+                    <label>Yesterday's Calories Burned</label>
+                    <input type="number" id="yesterdayCalories" placeholder="2510">
+                </div>
+                
+                <div class="form-group">
+                    <label>Last Night's Sleep (hours)</label>
+                    <input type="number" id="lastNightSleep" step="0.5" placeholder="7.5">
+                </div>
+                
+                <button onclick="saveMorningCheckin()">Save Check-in</button>
+            </div>
+
+            <!-- Meals -->
+            <div class="card">
+                <div class="card-title">Today's Meals</div>
+                
+                <div class="form-group">
+                    <label>Breakfast</label>
+                    <div class="meal-inputs">
+                        <div>
+                            <input type="number" id="breakfastCal" placeholder="Calories">
+                            <div class="quick-picks">300/500/700/900</div>
+                        </div>
+                        <div>
+                            <input type="number" id="breakfastPro" placeholder="Protein (g)">
+                            <div class="quick-picks">10/20/30/40/50</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Lunch</label>
+                    <div class="meal-inputs">
+                        <div>
+                            <input type="number" id="lunchCal" placeholder="Calories">
+                            <div class="quick-picks">300/500/700/900</div>
+                        </div>
+                        <div>
+                            <input type="number" id="lunchPro" placeholder="Protein (g)">
+                            <div class="quick-picks">10/20/30/40/50</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Dinner</label>
+                    <div class="meal-inputs">
+                        <div>
+                            <input type="number" id="dinnerCal" placeholder="Calories">
+                            <div class="quick-picks">300/500/700/900</div>
+                        </div>
+                        <div>
+                            <input type="number" id="dinnerPro" placeholder="Protein (g)">
+                            <div class="quick-picks">10/20/30/40/50</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Snack (optional)</label>
+                    <div class="meal-inputs">
+                        <div>
+                            <input type="number" id="snackCal" placeholder="Calories">
+                            <div class="quick-picks">100/200</div>
+                        </div>
+                        <div>
+                            <input type="number" id="snackPro" placeholder="Protein (g)">
+                            <div class="quick-picks">0/6/20</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Other (optional)</label>
+                    <small style="color: var(--text-light);">Fancy coffee, soda, etc.</small>
+                    <div class="meal-inputs">
+                        <div>
+                            <input type="number" id="otherCal" placeholder="Calories">
+                        </div>
+                        <div>
+                            <input type="number" id="otherPro" placeholder="Protein (g)">
+                        </div>
+                    </div>
+                </div>
+                
+                <button onclick="saveMeals()">Save Meals</button>
+                
+                <div id="mealSummary" class="summary-box hidden" style="margin-top: 16px;">
+                    <div class="summary-row">
+                        <span>Meals</span>
+                        <span id="totalMealCal">0 kcal</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Alcohol</span>
+                        <span id="totalAlcoholCal">0 kcal</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Total</span>
+                        <span id="totalCal">0 kcal</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Protein</span>
+                        <span id="totalProtein">0g</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Deficit</span>
+                        <span id="deficit">0 kcal</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Saturday Strength -->
+            <div class="card" id="saturdayCard">
+                <div class="card-title">Saturday Strength</div>
+                
+                <div class="form-group">
+                    <label id="bicepTarget">Bicep Curls: 2×4 with 15kg</label>
+                    <small style="color: var(--text-light);">Week 1 of progression</small>
+                    <div style="margin-top: 12px;">
+                        <button onclick="completeBiceps(true)" style="margin-bottom: 8px;">✓ Completed Target</button>
+                        <div class="input-row">
+                            <input type="number" id="bicepSets" placeholder="Sets" min="1">
+                            <input type="number" id="bicepReps" placeholder="Reps" min="1">
+                            <button onclick="completeBiceps(false)">Log Custom</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Push-ups: 2×10</label>
+                    <div class="checkbox-item">
+                        <input type="checkbox" id="pushups" onchange="togglePushups()">
+                        <label for="pushups" style="margin: 0; cursor: pointer;">Completed 2×10</label>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label>Chin-ups (to failure, max 10)</label>
+                    <input type="number" id="chinups" placeholder="Reps achieved" min="0" max="10">
+                </div>
+                
+                <button onclick="saveStrength()">Save Strength Session</button>
+            </div>
+
+            <!-- Alcohol -->
+            <div class="card">
+                <div class="card-title">Alcohol Today</div>
+                
+                <div class="form-group">
+                    <label>Pint Equivalents</label>
+                    <input type="number" id="todayAlcohol" step="0.5" placeholder="0" min="0">
+                    <small style="color: var(--text-light);">1 pint = 200 kcal</small>
+                </div>
+                
+                <button onclick="saveAlcohol()">Save Alcohol</button>
+                <button class="button-secondary" onclick="markAlcoholFree()" style="margin-top: 8px;">Mark as Alcohol-Free Day</button>
+            </div>
+
+            <!-- Sunday Body Fat -->
+            <div class="card" id="sundayCard">
+                <div class="card-title">Sunday Body Fat %</div>
+                
+                <div class="form-group">
+                    <label>Body Fat Percentage</label>
+                    <input type="number" id="bodyFat" step="0.1" placeholder="23.5">
+                    <small style="color: var(--text-light);">Based on weekly photo assessment</small>
+                </div>
+                
+                <button onclick="saveBodyFat()">Save Body Fat %</button>
+            </div>
+        </div>
+
+        <!-- Streaks View -->
+        <div id="streaksView" class="view hidden">
+            <div class="card">
+                <div class="card-title">Current Streaks 🔥</div>
+                <div id="currentStreaks"></div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Consistency (Last 30 Days)</div>
+                <div id="consistencyMetrics"></div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Personal Bests 🏆</div>
+                <div id="personalBests"></div>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Achievements</div>
+                <div id="achievementsList"></div>
+            </div>
+        </div>
+
+        <!-- Settings View -->
+        <div id="settingsView" class="view hidden">
+            <div class="card">
+                <div class="card-title">Backup & Restore</div>
+                
+                <button onclick="exportBackup()" style="margin-bottom: 8px;">☁️ Export Backup</button>
+                
+                <div class="form-group">
+                    <label>Import Backup</label>
+                    <input type="file" id="importFile" accept=".json" onchange="importBackup()" style="padding: 8px;">
+                </div>
+                
+                <small style="color: var(--text-light);">Last backup: <span id="lastBackup">Never</span></small>
+            </div>
+            
+            <div class="card">
+                <div class="card-title">Data Management</div>
+                <button onclick="resetAllData()" class="button-secondary">⚠️ Reset All Data</button>
+                <small style="color: var(--text-light); display: block; margin-top: 8px;">This cannot be undone!</small>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="nav-tabs">
+        <button class="nav-tab active" onclick="switchView('dashboard')">
+            <div class="nav-icon">📊</div>
+            <div class="nav-label">Dashboard</div>
+        </button>
+        <button class="nav-tab" onclick="switchView('log')">
+            <div class="nav-icon">✏️</div>
+            <div class="nav-label">Log</div>
+        </button>
+        <button class="nav-tab" onclick="switchView('streaks')">
+            <div class="nav-icon">🔥</div>
+            <div class="nav-label">Streaks</div>
+        </button>
+        <button class="nav-tab" onclick="switchView('settings')">
+            <div class="nav-icon">⚙️</div>
+            <div class="nav-label">Settings</div>
+        </button>
+    </div>
+
+    <script>
+        // Data structure
+        let data = {
+            dailyLogs: {},
+            streaks: {
+                dailyHabits: 0,
+                meditation: 0,
+                plank: 0,
+                deadHang: 0,
+                saturdayStrength: 0,
+                beerBudget: 0,
+                weighIns: 0,
+                alcoholFree: 0
+            },
+            personalBests: {
+                longestDailyHabits: 0,
+                longestMeditation: 0,
+                longestPlank: 0,
+                longestDeadHang: 0,
+                longestStrength: 0,
+                longestBeerBudget: 0,
+                longestWeighIns: 0,
+                longestAlcoholFree: 0,
+                lowestWeight: null,
+                lowestBodyFat: null,
+                mostChinups: 0
+            },
+            achievements: [],
+            bicepProgression: {
+                currentWeek: 1,
+                completedWeeks: 0,
+                consecutiveSuccesses: 0
+            },
+            lastBackup: null,
+            backupDismissed: null
+        };
+
+        // Achievement definitions
+        const ACHIEVEMENTS = {
+            // Streak milestones (will be generated for each category)
+            streaks: [
+                { days: 1, name: "Started!", emoji: "🎯" },
+                { days: 3, name: "Building momentum", emoji: "🔥" },
+                { days: 7, name: "One week!", emoji: "⭐" },
+                { days: 14, name: "Two weeks strong", emoji: "💪" },
+                { days: 21, name: "Habit forming", emoji: "🌱" },
+                { days: 30, name: "One month!", emoji: "🏆" },
+                { days: 50, name: "50-day streak!", emoji: "⚡" },
+                { days: 75, name: "75 days committed", emoji: "🎖️" },
+                { days: 100, name: "Century!", emoji: "💯" },
+                { days: 150, name: "5 months strong", emoji: "🔱" },
+                { days: 200, name: "200-day warrior", emoji: "🗡️" },
+                { days: 300, name: "Nearly a year!", emoji: "📅" },
+                { days: 365, name: "ONE YEAR!", emoji: "👑" },
+                { days: 500, name: "500-day legend", emoji: "🏔️" },
+                { days: 1000, name: "1000 DAYS!", emoji: "🚀" }
+            ],
+            
+            // Weight loss milestones
+            weight: [
+                { kg: 1, name: "First kilo!", emoji: "🎉" },
+                { kg: 2, name: "Progress visible", emoji: "👀" },
+                { kg: 5, name: "Halfway!", emoji: "⚖️" },
+                { kg: 7, name: "Nearly there!", emoji: "💪" },
+                { kg: 10, name: "GOAL REACHED!", emoji: "🏆" }
+            ],
+            
+            // Body fat milestones
+            bodyFat: [
+                { percent: 1, name: "Leaner!", emoji: "📊" },
+                { percent: 2, name: "Visible progress", emoji: "💪" },
+                { percent: 5, name: "Transformation!", emoji: "🔥" }
+            ],
+            
+            // Strength milestones
+            chinups: [
+                { reps: 1, name: "Gravity conquered!", emoji: "💪" },
+                { reps: 5, name: "Strong!", emoji: "⚡" },
+                { reps: 10, name: "Goal reached!", emoji: "🎯" },
+                { reps: 15, name: "Beyond!", emoji: "🚀" }
+            ]
+        };
+
+        // Initialize
+        function init() {
+            loadData();
+            updateGreeting();
+            updateDate();
+            updateDashboard();
+            updateStreaksView();
+            checkSaturdayCard();
+            checkSundayCard();
+            checkBackupReminder();
+            loadTodayData();
+            
+            // Set up service worker
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js');
+            }
+        }
+
+        function loadData() {
+            const stored = localStorage.getItem('healthDashboardData');
+            if (stored) {
+                data = JSON.parse(stored);
+            }
+        }
+
+        function saveData() {
+            localStorage.setItem('healthDashboardData', JSON.stringify(data));
+        }
+
+        function updateGreeting() {
+            const hour = new Date().getHours();
+            let greeting = "Hi, John";
+            if (hour >= 5 && hour < 12) greeting = "Good morning, John";
+            else if (hour >= 12 && hour < 18) greeting = "Hi, John";
+            else greeting = "Evening, John";
+            
+            document.getElementById('greeting').textContent = greeting;
+        }
+
+        function updateDate() {
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('currentDate').textContent = new Date().toLocaleDateString('en-GB', options);
+        }
+
+        function getTodayKey() {
+            return new Date().toISOString().split('T')[0];
+        }
+
+        function getYesterdayKey() {
+            const yesterday = new Date();
+            yesterday.setDate(yesterday.getDate() - 1);
+            return yesterday.toISOString().split('T')[0];
+        }
+
+        function getTodayLog() {
+            const key = getTodayKey();
+            if (!data.dailyLogs[key]) {
+                data.dailyLogs[key] = {
+                    weight: null,
+                    steps: null,
+                    caloriesBurned: null,
+                    sleep: null,
+                    meditation: false,
+                    plank: false,
+                    deadHang: false,
+                    meals: {
+                        breakfast: { cal: null, pro: null },
+                        lunch: { cal: null, pro: null },
+                        dinner: { cal: null, pro: null },
+                        snack: { cal: null, pro: null },
+                        other: { cal: null, pro: null }
+                    },
+                    alcohol: 0,
+                    alcoholFree: false,
+                    saturdayStrength: null,
+                    bodyFat: null
+                };
+            }
+            return data.dailyLogs[key];
+        }
+
+        function loadTodayData() {
+            const today = getTodayLog();
+            
+            // Load habits
+            document.getElementById('meditation').checked = today.meditation;
+            document.getElementById('plank').checked = today.plank;
+            document.getElementById('deadHang').checked = today.deadHang;
+            
+            updateCheckboxUI('meditation', today.meditation);
+            updateCheckboxUI('plank', today.plank);
+            updateCheckboxUI('deadHang', today.deadHang);
+            
+            // Load morning check-in
+            if (today.weight) document.getElementById('todayWeight').value = today.weight;
+            if (today.steps) document.getElementById('yesterdaySteps').value = today.steps;
+            if (today.caloriesBurned) document.getElementById('yesterdayCalories').value = today.caloriesBurned;
+            if (today.sleep) document.getElementById('lastNightSleep').value = today.sleep;
+            
+            // Load meals
+            if (today.meals.breakfast.cal) document.getElementById('breakfastCal').value = today.meals.breakfast.cal;
+            if (today.meals.breakfast.pro) document.getElementById('breakfastPro').value = today.meals.breakfast.pro;
+            if (today.meals.lunch.cal) document.getElementById('lunchCal').value = today.meals.lunch.cal;
+            if (today.meals.lunch.pro) document.getElementById('lunchPro').value = today.meals.lunch.pro;
+            if (today.meals.dinner.cal) document.getElementById('dinnerCal').value = today.meals.dinner.cal;
+            if (today.meals.dinner.pro) document.getElementById('dinnerPro').value = today.meals.dinner.pro;
+            if (today.meals.snack.cal) document.getElementById('snackCal').value = today.meals.snack.cal;
+            if (today.meals.snack.pro) document.getElementById('snackPro').value = today.meals.snack.pro;
+            if (today.meals.other.cal) document.getElementById('otherCal').value = today.meals.other.cal;
+            if (today.meals.other.pro) document.getElementById('otherPro').value = today.meals.other.pro;
+            
+            updateMealSummary();
+            
+            // Load alcohol
+            if (today.alcohol) document.getElementById('todayAlcohol').value = today.alcohol;
+            
+            // Load strength (if applicable)
+            if (today.saturdayStrength) {
+                if (today.saturdayStrength.pushups) {
+                    document.getElementById('pushups').checked = true;
+                }
+                if (today.saturdayStrength.chinups) {
+                    document.getElementById('chinups').value = today.saturdayStrength.chinups;
+                }
+            }
+            
+            // Load body fat (if applicable)
+            if (today.bodyFat) document.getElementById('bodyFat').value = today.bodyFat;
+        }
+
+        function toggleHabit(habit) {
+            const today = getTodayLog();
+            const checkbox = document.getElementById(habit);
+            today[habit] = checkbox.checked;
+            
+            updateCheckboxUI(habit, checkbox.checked);
+            
+            if (checkbox.checked) {
+                showConfetti();
+                checkAchievements();
+            }
+            
+            updateStreaks();
+            saveData();
+            updateDashboard();
+        }
+
+        function updateCheckboxUI(habit, checked) {
+            const item = document.getElementById(habit + 'Check');
+            if (checked) {
+                item.classList.add('completed');
+            } else {
+                item.classList.remove('completed');
+            }
+        }
+
+        function saveMorningCheckin() {
+            const today = getTodayLog();
+            
+            today.weight = parseFloat(document.getElementById('todayWeight').value) || null;
+            today.steps = parseInt(document.getElementById('yesterdaySteps').value) || null;
+            today.caloriesBurned = parseInt(document.getElementById('yesterdayCalories').value) || null;
+            today.sleep = parseFloat(document.getElementById('lastNightSleep').value) || null;
+            
+            saveData();
+            updateDashboard();
+            updateStreaks();
+            checkAchievements();
+            
+            alert('✓ Morning check-in saved!');
+        }
+
+        function saveMeals() {
+            const today = getTodayLog();
+            
+            today.meals.breakfast.cal = parseInt(document.getElementById('breakfastCal').value) || null;
+            today.meals.breakfast.pro = parseInt(document.getElementById('breakfastPro').value) || null;
+            today.meals.lunch.cal = parseInt(document.getElementById('lunchCal').value) || null;
+            today.meals.lunch.pro = parseInt(document.getElementById('lunchPro').value) || null;
+            today.meals.dinner.cal = parseInt(document.getElementById('dinnerCal').value) || null;
+            today.meals.dinner.pro = parseInt(document.getElementById('dinnerPro').value) || null;
+            today.meals.snack.cal = parseInt(document.getElementById('snackCal').value) || null;
+            today.meals.snack.pro = parseInt(document.getElementById('snackPro').value) || null;
+            today.meals.other.cal = parseInt(document.getElementById('otherCal').value) || null;
+            today.meals.other.pro = parseInt(document.getElementById('otherPro').value) || null;
+            
+            saveData();
+            updateMealSummary();
+            checkAchievements();
+            
+            alert('✓ Meals saved!');
+        }
+
+        function updateMealSummary() {
+            const today = getTodayLog();
+            const summary = document.getElementById('mealSummary');
+            
+            let totalMealCal = 0;
+            let totalProtein = 0;
+            
+            Object.values(today.meals).forEach(meal => {
+                totalMealCal += meal.cal || 0;
+                totalProtein += meal.pro || 0;
+            });
+            
+            const alcoholCal = (today.alcohol || 0) * 200;
+            const totalCal = totalMealCal + alcoholCal;
+            const tdee = 2570;
+            const deficit = tdee - totalCal;
+            
+            document.getElementById('totalMealCal').textContent = totalMealCal + ' kcal';
+            document.getElementById('totalAlcoholCal').textContent = alcoholCal + ' kcal';
+            document.getElementById('totalCal').textContent = totalCal + ' kcal';
+            document.getElementById('totalProtein').textContent = totalProtein + 'g';
+            document.getElementById('deficit').textContent = deficit + ' kcal';
+            
+            if (totalCal > 0) {
+                summary.classList.remove('hidden');
+            }
+        }
+
+        function saveAlcohol() {
+            const today = getTodayLog();
+            today.alcohol = parseFloat(document.getElementById('todayAlcohol').value) || 0;
+            today.alcoholFree = false;
+            
+            saveData();
+            updateMealSummary();
+            updateDashboard();
+            checkAchievements();
+            
+            alert('✓ Alcohol logged!');
+        }
+
+        function markAlcoholFree() {
+            const today = getTodayLog();
+            today.alcohol = 0;
+            today.alcoholFree = true;
+            document.getElementById('todayAlcohol').value = '0';
+            
+            saveData();
+            updateMealSummary();
+            updateDashboard();
+            updateStreaks();
+            checkAchievements();
+            
+            alert('✓ Marked as alcohol-free day!');
+        }
+
+        function completeBiceps(targetCompleted) {
+            const today = getTodayLog();
+            if (!today.saturdayStrength) {
+                today.saturdayStrength = {};
+            }
+            
+            const progression = [
+                { week: 1, sets: 2, reps: 4 },
+                { week: 3, sets: 2, reps: 5 },
+                { week: 5, sets: 2, reps: 6 },
+                { week: 7, sets: 2, reps: 7 },
+                { week: 9, sets: 2, reps: 8 },
+                { week: 11, sets: 2, reps: 9 },
+                { week: 13, sets: 2, reps: 10 },
+                { week: 15, sets: 3, reps: 8 },
+                { week: 17, sets: 3, reps: 10 },
+                { week: 19, sets: 3, reps: 12 }
+            ];
+            
+            if (targetCompleted) {
+                const current = progression.find(p => p.week <= data.bicepProgression.currentWeek && 
+                    (!progression[progression.indexOf(p) + 1] || progression[progression.indexOf(p) + 1].week > data.bicepProgression.currentWeek));
+                
+                today.saturdayStrength.biceps = {
+                    sets: current.sets,
+                    reps: current.reps,
+                    weight: 15
+                };
+                
+                data.bicepProgression.consecutiveSuccesses++;
+                if (data.bicepProgression.consecutiveSuccesses >= 2) {
+                    // Progress to next level
+                    const nextLevel = progression.find(p => p.week > data.bicepProgression.currentWeek);
+                    if (nextLevel) {
+                        data.bicepProgression.currentWeek = nextLevel.week;
+                        data.bicepProgression.consecutiveSuccesses = 0;
+                        alert(`🎉 Progressed to Week ${nextLevel.week}: ${nextLevel.sets}×${nextLevel.reps}!`);
+                    }
+                }
+            } else {
+                const sets = parseInt(document.getElementById('bicepSets').value);
+                const reps = parseInt(document.getElementById('bicepReps').value);
+                
+                if (sets && reps) {
+                    today.saturdayStrength.biceps = {
+                        sets: sets,
+                        reps: reps,
+                        weight: 15
+                    };
+                    data.bicepProgression.consecutiveSuccesses = 0;
+                } else {
+                    alert('Please enter sets and reps');
+                    return;
+                }
+            }
+            
+            saveData();
+            alert('✓ Bicep curls logged!');
+        }
+
+        function togglePushups() {
+            const today = getTodayLog();
+            if (!today.saturdayStrength) {
+                today.saturdayStrength = {};
+            }
+            
+            today.saturdayStrength.pushups = document.getElementById('pushups').checked;
+            saveData();
+        }
+
+        function saveStrength() {
+            const today = getTodayLog();
+            if (!today.saturdayStrength) {
+                today.saturdayStrength = {};
+            }
+            
+            const chinups = parseInt(document.getElementById('chinups').value);
+            if (chinups !== null && !isNaN(chinups)) {
+                today.saturdayStrength.chinups = chinups;
+                
+                if (chinups > data.personalBests.mostChinups) {
+                    data.personalBests.mostChinups = chinups;
+                    showAchievement(`New PR: ${chinups} chin-ups! 💪`, "Personal best!");
+                }
+            }
+            
+            saveData();
+            updateStreaks();
+            updateDashboard();
+            checkAchievements();
+            
+            alert('✓ Strength session saved!');
+        }
+
+        function saveBodyFat() {
+            const today = getTodayLog();
+            const bf = parseFloat(document.getElementById('bodyFat').value);
+            
+            if (bf) {
+                today.bodyFat = bf;
+                
+                if (!data.personalBests.lowestBodyFat || bf < data.personalBests.lowestBodyFat) {
+                    data.personalBests.lowestBodyFat = bf;
+                }
+                
+                saveData();
+                updateDashboard();
+                checkAchievements();
+                
+                alert('✓ Body fat % saved!');
+            } else {
+                alert('Please enter body fat percentage');
+            }
+        }
+
+        function updateStreaks() {
+            // Calculate all streaks
+            const sortedDates = Object.keys(data.dailyLogs).sort().reverse();
+            
+            // Daily habits streak
+            let dailyHabitsStreak = 0;
+            for (const date of sortedDates) {
+                const log = data.dailyLogs[date];
+                if (log.meditation && log.plank && log.deadHang) {
+                    dailyHabitsStreak++;
+                } else {
+                    break;
+                }
+            }
+            data.streaks.dailyHabits = dailyHabitsStreak;
+            if (dailyHabitsStreak > data.personalBests.longestDailyHabits) {
+                data.personalBests.longestDailyHabits = dailyHabitsStreak;
+            }
+            
+            // Individual habit streaks
+            ['meditation', 'plank', 'deadHang'].forEach(habit => {
+                let streak = 0;
+                for (const date of sortedDates) {
+                    if (data.dailyLogs[date][habit]) {
+                        streak++;
+                    } else {
+                        break;
+                    }
+                }
+                data.streaks[habit] = streak;
+                const pbKey = 'longest' + habit.charAt(0).toUpperCase() + habit.slice(1);
+                if (streak > data.personalBests[pbKey]) {
+                    data.personalBests[pbKey] = streak;
+                }
+            });
+            
+            // Weigh-in streak
+            let weighStreak = 0;
+            for (const date of sortedDates) {
+                if (data.dailyLogs[date].weight !== null) {
+                    weighStreak++;
+                } else {
+                    break;
+                }
+            }
+            data.streaks.weighIns = weighStreak;
+            if (weighStreak > data.personalBests.longestWeighIns) {
+                data.personalBests.longestWeighIns = weighStreak;
+            }
+            
+            // Alcohol-free streak
+            let afStreak = 0;
+            for (const date of sortedDates) {
+                if (data.dailyLogs[date].alcoholFree || data.dailyLogs[date].alcohol === 0) {
+                    afStreak++;
+                } else {
+                    break;
+                }
+            }
+            data.streaks.alcoholFree = afStreak;
+            if (afStreak > data.personalBests.longestAlcoholFree) {
+                data.personalBests.longestAlcoholFree = afStreak;
+            }
+            
+            saveData();
+        }
+
+        function checkAchievements() {
+            // Check for new achievements
+            const newAchievements = [];
+            
+            // Streak achievements
+            Object.keys(data.streaks).forEach(streakType => {
+                const currentStreak = data.streaks[streakType];
+                ACHIEVEMENTS.streaks.forEach(milestone => {
+                    const achievementId = `${streakType}_${milestone.days}`;
+                    if (currentStreak >= milestone.days && !data.achievements.includes(achievementId)) {
+                        newAchievements.push({
+                            id: achievementId,
+                            title: `${milestone.emoji} ${milestone.name}`,
+                            description: `${currentStreak} day ${streakType.replace(/([A-Z])/g, ' $1').toLowerCase()} streak`
+                        });
+                        data.achievements.push(achievementId);
+                    }
+                });
+            });
+            
+            // Weight loss achievements
+            if (data.personalBests.lowestWeight) {
+                const startWeight = 91.4; // Initial weight
+                const lostKg = startWeight - data.personalBests.lowestWeight;
+                
+                ACHIEVEMENTS.weight.forEach(milestone => {
+                    const achievementId = `weight_${milestone.kg}`;
+                    if (lostKg >= milestone.kg && !data.achievements.includes(achievementId)) {
+                        newAchievements.push({
+                            id: achievementId,
+                            title: `${milestone.emoji} ${milestone.name}`,
+                            description: `Lost ${lostKg.toFixed(1)}kg`
+                        });
+                        data.achievements.push(achievementId);
+                    }
+                });
+            }
+            
+            // Show new achievements
+            newAchievements.forEach((achievement, index) => {
+                setTimeout(() => {
+                    showAchievement(achievement.title, achievement.description);
+                    showConfetti();
+                }, index * 2000);
+            });
+            
+            saveData();
+        }
+
+        function showAchievement(title, description) {
+            const popup = document.createElement('div');
+            popup.className = 'achievement-popup';
+            popup.innerHTML = `
+                <div class="achievement-title">${title}</div>
+                <div class="achievement-desc">${description}</div>
+            `;
+            document.body.appendChild(popup);
+            
+            setTimeout(() => {
+                popup.remove();
+            }, 4000);
+        }
+
+        function showConfetti() {
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + '%';
+                    confetti.style.background = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444'][Math.floor(Math.random() * 4)];
+                    confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                    document.body.appendChild(confetti);
+                    
+                    setTimeout(() => confetti.remove(), 2000);
+                }, i * 50);
+            }
+        }
+
+        function updateDashboard() {
+            const today = getTodayLog();
+            
+            // Current streak (perfect days)
+            document.getElementById('currentStreak').textContent = data.streaks.dailyHabits;
+            
+            // This week completion
+            const weekStart = new Date();
+            weekStart.setDate(weekStart.getDate() - weekStart.getDay());
+            let weekDays = 0;
+            let weekExercise = 0;
+            
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(weekStart);
+                date.setDate(date.getDate() + i);
+                const key = date.toISOString().split('T')[0];
+                const log = data.dailyLogs[key];
+                
+                if (log) {
+                    weekDays++;
+                    if (log.meditation && log.plank && log.deadHang) {
+                        weekExercise++;
+                    }
+                }
+            }
+            
+            document.getElementById('weekCompletion').textContent = `${weekExercise}/7`;
+            document.getElementById('weekExercise').textContent = `${weekExercise}/7`;
+            document.getElementById('weekExerciseBar').style.width = (weekExercise / 7 * 100) + '%';
+            
+            // Beer budget this week
+            let weekBeer = 0;
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(weekStart);
+                date.setDate(date.getDate() + i);
+                const key = date.toISOString().split('T')[0];
+                const log = data.dailyLogs[key];
+                
+                if (log && log.alcohol) {
+                    weekBeer += log.alcohol;
+                }
+            }
+            
+            document.getElementById('weekBeer').textContent = `${weekBeer.toFixed(1)}/15 pints`;
+            const beerPercent = Math.min(weekBeer / 15 * 100, 100);
+            document.getElementById('weekBeerBar').style.width = beerPercent + '%';
+            document.getElementById('weekBeerBar').className = 'progress-fill ' + 
+                (weekBeer <= 15 ? '' : 'danger');
+            
+            // Weight trend
+            const weights = [];
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(weekStart);
+                date.setDate(date.getDate() + i);
+                const key = date.toISOString().split('T')[0];
+                const log = data.dailyLogs[key];
+                
+                if (log && log.weight) {
+                    weights.push(log.weight);
+                }
+            }
+            
+            if (weights.length >= 2) {
+                const diff = weights[weights.length - 1] - weights[0];
+                const arrow = diff < 0 ? '↓' : diff > 0 ? '↑' : '→';
+                document.getElementById('weekWeight').textContent = `${arrow} ${Math.abs(diff).toFixed(1)}kg`;
+            } else {
+                document.getElementById('weekWeight').textContent = '--';
+            }
+            
+            // Sleep average
+            const sleeps = [];
+            for (let i = 0; i < 7; i++) {
+                const date = new Date(weekStart);
+                date.setDate(date.getDate() + i);
+                const key = date.toISOString().split('T')[0];
+                const log = data.dailyLogs[key];
+                
+                if (log && log.sleep) {
+                    sleeps.push(log.sleep);
+                }
+            }
+            
+            if (sleeps.length > 0) {
+                const avg = sleeps.reduce((a, b) => a + b, 0) / sleeps.length;
+                document.getElementById('weekSleep').textContent = `${avg.toFixed(1)}hrs`;
+            } else {
+                document.getElementById('weekSleep').textContent = '--';
+            }
+            
+            // Quick stats
+            document.getElementById('longestStreak').textContent = data.personalBests.longestDailyHabits;
+            
+            if (today.weight) {
+                document.getElementById('currentWeight').textContent = today.weight + 'kg';
+                
+                if (!data.personalBests.lowestWeight || today.weight < data.personalBests.lowestWeight) {
+                    data.personalBests.lowestWeight = today.weight;
+                }
+            }
+            
+            if (today.bodyFat) {
+                document.getElementById('currentBF').textContent = today.bodyFat + '%';
+            }
+            
+            // Strength week
+            const progressionWeek = Math.min(Math.floor((data.bicepProgression.currentWeek - 1) / 2) + 1, 19);
+            document.getElementById('strengthWeek').textContent = `Week ${progressionWeek}/19`;
+            
+            // Update bicep target display
+            const progression = [
+                { week: 1, sets: 2, reps: 4 },
+                { week: 3, sets: 2, reps: 5 },
+                { week: 5, sets: 2, reps: 6 },
+                { week: 7, sets: 2, reps: 7 },
+                { week: 9, sets: 2, reps: 8 },
+                { week: 11, sets: 2, reps: 9 },
+                { week: 13, sets: 2, reps: 10 },
+                { week: 15, sets: 3, reps: 8 },
+                { week: 17, sets: 3, reps: 10 },
+                { week: 19, sets: 3, reps: 12 }
+            ];
+            
+            const current = progression.find(p => p.week <= data.bicepProgression.currentWeek && 
+                (!progression[progression.indexOf(p) + 1] || progression[progression.indexOf(p) + 1].week > data.bicepProgression.currentWeek));
+            
+            if (current) {
+                document.getElementById('bicepTarget').textContent = 
+                    `Bicep Curls: ${current.sets}×${current.reps} with 15kg`;
+            }
+        }
+
+        function updateStreaksView() {
+            // Current streaks
+            const streaksHTML = `
+                <div class="streak-display">
+                    <div class="streak-icon">🔥</div>
+                    <div class="streak-info">
+                        <div class="streak-number">${data.streaks.dailyHabits} days</div>
+                        <div class="streak-label">Daily habits (all 3)</div>
+                    </div>
+                </div>
+                <div class="streak-display">
+                    <div class="streak-icon">🧘</div>
+                    <div class="streak-info">
+                        <div class="streak-number">${data.streaks.meditation} days</div>
+                        <div class="streak-label">Meditation</div>
+                    </div>
+                </div>
+                <div class="streak-display">
+                    <div class="streak-icon">💪</div>
+                    <div class="streak-info">
+                        <div class="streak-number">${data.streaks.plank} days</div>
+                        <div class="streak-label">Plank</div>
+                    </div>
+                </div>
+                <div class="streak-display">
+                    <div class="streak-icon">🏋️</div>
+                    <div class="streak-info">
+                        <div class="streak-number">${data.streaks.deadHang} days</div>
+                        <div class="streak-label">Dead hang</div>
+                    </div>
+                </div>
+                <div class="streak-display">
+                    <div class="streak-icon">⚖️</div>
+                    <div class="streak-info">
+                        <div class="streak-number">${data.streaks.weighIns} days</div>
+                        <div class="streak-label">Daily weigh-ins</div>
+                    </div>
+                </div>
+                <div class="streak-display">
+                    <div class="streak-icon">🚫</div>
+                    <div class="streak-info">
+                        <div class="streak-number">${data.streaks.alcoholFree} days</div>
+                        <div class="streak-label">Alcohol-free</div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('currentStreaks').innerHTML = streaksHTML;
+            
+            // Consistency metrics
+            const last30 = getLast30DaysConsistency();
+            const consistencyHTML = `
+                <div style="margin-bottom: 12px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                        <span>Exercise completion</span>
+                        <span>${last30.exercise}%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${last30.exercise}%"></div>
+                    </div>
+                </div>
+                <div style="margin-bottom: 12px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                        <span>Weight logging</span>
+                        <span>${last30.weight}%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${last30.weight}%"></div>
+                    </div>
+                </div>
+                <div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                        <span>Overall compliance</span>
+                        <span>${last30.overall}%</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${last30.overall}%"></div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('consistencyMetrics').innerHTML = consistencyHTML;
+            
+            // Personal bests
+            const pbHTML = `
+                <div class="streak-display">
+                    <div class="streak-icon">🏆</div>
+                    <div class="streak-info">
+                        <div class="streak-number">${data.personalBests.longestDailyHabits} days</div>
+                        <div class="streak-label">Longest daily habits streak</div>
+                    </div>
+                </div>
+                <div class="streak-display">
+                    <div class="streak-icon">⚖️</div>
+                    <div class="streak-info">
+                        <div class="streak-number">${data.personalBests.lowestWeight ? data.personalBests.lowestWeight + 'kg' : '--'}</div>
+                        <div class="streak-label">Lowest weight</div>
+                    </div>
+                </div>
+                <div class="streak-display">
+                    <div class="streak-icon">📊</div>
+                    <div class="streak-info">
+                        <div class="streak-number">${data.personalBests.lowestBodyFat ? data.personalBests.lowestBodyFat + '%' : '--'}</div>
+                        <div class="streak-label">Lowest body fat</div>
+                    </div>
+                </div>
+                <div class="streak-display">
+                    <div class="streak-icon">💪</div>
+                    <div class="streak-info">
+                        <div class="streak-number">${data.personalBests.mostChinups}</div>
+                        <div class="streak-label">Most chin-ups</div>
+                    </div>
+                </div>
+            `;
+            document.getElementById('personalBests').innerHTML = pbHTML;
+            
+            // Achievements
+            const achievementsHTML = data.achievements.length > 0 ? 
+                data.achievements.slice(-10).reverse().map(id => {
+                    return `<span class="badge badge-success">${id.replace(/_/g, ' ')}</span>`;
+                }).join('') :
+                '<p style="color: var(--text-light);">Complete your first streak to unlock achievements!</p>';
+            
+            document.getElementById('achievementsList').innerHTML = achievementsHTML;
+        }
+
+        function getLast30DaysConsistency() {
+            const today = new Date();
+            let exerciseDays = 0;
+            let weightDays = 0;
+            let totalDays = 0;
+            
+            for (let i = 0; i < 30; i++) {
+                const date = new Date(today);
+                date.setDate(date.getDate() - i);
+                const key = date.toISOString().split('T')[0];
+                const log = data.dailyLogs[key];
+                
+                if (log) {
+                    totalDays++;
+                    if (log.meditation && log.plank && log.deadHang) exerciseDays++;
+                    if (log.weight) weightDays++;
+                }
+            }
+            
+            return {
+                exercise: totalDays > 0 ? Math.round(exerciseDays / totalDays * 100) : 0,
+                weight: totalDays > 0 ? Math.round(weightDays / totalDays * 100) : 0,
+                overall: totalDays > 0 ? Math.round((exerciseDays + weightDays) / (totalDays * 2) * 100) : 0
+            };
+        }
+
+        function checkSaturdayCard() {
+            const today = new Date();
+            const isSaturday = today.getDay() === 6;
+            document.getElementById('saturdayCard').style.display = isSaturday ? 'block' : 'none';
+        }
+
+        function checkSundayCard() {
+            const today = new Date();
+            const isSunday = today.getDay() === 0;
+            document.getElementById('sundayCard').style.display = isSunday ? 'block' : 'none';
+        }
+
+        function checkBackupReminder() {
+            if (!data.lastBackup) {
+                return;
+            }
+            
+            const lastBackup = new Date(data.lastBackup);
+            const daysSince = Math.floor((Date.now() - lastBackup) / (1000 * 60 * 60 * 24));
+            
+            if (daysSince >= 7) {
+                if (!data.backupDismissed || Date.now() - data.backupDismissed > 24 * 60 * 60 * 1000) {
+                    document.getElementById('backupBanner').classList.remove('hidden');
+                }
+            }
+            
+            // Update last backup display
+            if (data.lastBackup) {
+                const date = new Date(data.lastBackup);
+                document.getElementById('lastBackup').textContent = date.toLocaleDateString();
+            }
+        }
+
+        function dismissBackupBanner() {
+            data.backupDismissed = Date.now();
+            saveData();
+            document.getElementById('backupBanner').classList.add('hidden');
+        }
+
+        function exportBackup() {
+            const backup = JSON.stringify(data, null, 2);
+            const blob = new Blob([backup], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `health-dashboard-backup-${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            
+            data.lastBackup = Date.now();
+            data.backupDismissed = null;
+            saveData();
+            checkBackupReminder();
+            
+            alert('✓ Backup exported!');
+        }
+
+        function importBackup() {
+            const file = document.getElementById('importFile').files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (confirm('This will replace all current data. Continue?')) {
+                        data = imported;
+                        saveData();
+                        init();
+                        alert('✓ Backup imported successfully!');
+                    }
+                } catch (err) {
+                    alert('Error importing backup: ' + err.message);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function resetAllData() {
+            if (confirm('⚠️ This will delete ALL data permanently. Are you absolutely sure?')) {
+                if (confirm('Really? This cannot be undone!')) {
+                    localStorage.clear();
+                    location.reload();
+                }
+            }
+        }
+
+        function switchView(view) {
+            // Hide all views
+            document.querySelectorAll('.view').forEach(v => v.classList.add('hidden'));
+            
+            // Remove active from all tabs
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            
+            // Show selected view
+            document.getElementById(view + 'View').classList.remove('hidden');
+            
+            // Mark tab as active
+            event.target.closest('.nav-tab').classList.add('active');
+            
+            // Update views that need refreshing
+            if (view === 'streaks') {
+                updateStreaksView();
+            }
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Initialize on load
+        window.addEventListener('load', init);
+        
+        // Set up reminders (notifications would require service worker permissions)
+        setInterval(() => {
+            const now = new Date();
+            const hour = now.getHours();
+            const day = now.getDay();
+            
+            // Noon reminders
+            if (hour === 12 && now.getMinutes() === 0) {
+                const today = getTodayLog();
+                if (!today.weight) {
+                    // Could show notification here if permissions granted
+                    console.log('Reminder: Log your morning check-in');
+                }
+                
+                if (day === 6 && !today.saturdayStrength) {
+                    console.log('Reminder: Saturday strength work');
+                }
+                
+                if (day === 0 && !today.bodyFat) {
+                    console.log('Reminder: Log body fat %');
+                }
+            }
+            
+            // 9pm meal reminder
+            if (hour === 21 && now.getMinutes() === 0) {
+                const today = getTodayLog();
+                const hasMeals = Object.values(today.meals).some(m => m.cal !== null);
+                if (!hasMeals) {
+                    console.log('Reminder: Log today\'s meals');
+                }
+            }
+            
+            // 10am follow-up
+            if (hour === 10 && now.getMinutes() === 0) {
+                const yesterday = getYesterdayKey();
+                const yesterdayLog = data.dailyLogs[yesterday];
+                if (yesterdayLog) {
+                    const hasMeals = Object.values(yesterdayLog.meals).some(m => m.cal !== null);
+                    if (!hasMeals) {
+                        console.log('Reminder: Yesterday\'s meals not logged');
+                    }
+                }
+            }
+        }, 60000); // Check every minute
+    </script>
+</body>
+</html>
